@@ -1,33 +1,46 @@
 package Steps;
 
+import Base.BaseUtil;
+import Pages.LoginPage;
 import cucumber.api.DataTable;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginStep {
+public class LoginStep extends BaseUtil{
+
+    private BaseUtil base;
+
+
+    public LoginStep(BaseUtil base) {
+        this.base = base;
+    }
 
     @Given("^I navigate to the login page$")
     public void I_navigate_to_the_login_page() throws Throwable {
-        // Express the Regexp above with the code you wish you had
-        //throw new PendingException();
-    }
+        base.driver.navigate().to("http://www.executeautomation.com/demosite/Login.html");
 
+    }
 
     @And("^I click login buttom$")
     public void I_click_login_buttom() throws Throwable {
-        // Express the Regexp above with the code you wish you had
-        //throw new PendingException();
+       LoginPage page = new LoginPage(base.driver);
+        page.clickLogin();
     }
 
     @Then("^I should see the useform page$")
     public void I_shold_see_the_useform_page() throws Throwable {
-        // Express the Regexp above with the code you wish you had
-        //throw new PendingException();
+        WebDriverWait wait = new WebDriverWait(base.driver, 10);
+        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("Initial"))).isDisplayed(), true);
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("Initial"))).isDisplayed());
+
     }
 
     @And("^I enter the following for login$")
@@ -43,9 +56,10 @@ public class LoginStep {
             // code block to be executed
         }*/
 
+        LoginPage page = new LoginPage(base.driver);
+
         for (User user : users) {
-            System.out.println("The usermane is: " + user.username);
-            System.out.println("The password is: " + user.password);
+            page.Login(user.username, user.password);
         }
     }
 
